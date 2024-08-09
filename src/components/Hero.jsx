@@ -1,8 +1,8 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const Hero = () => {
-  const [showRegisterForm, setShowRegisterForm] = useState(true);
+  const [registered, setRegistered] = useState(true);
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -12,11 +12,14 @@ const Hero = () => {
     role: "user",
   });
 
-  const handleUserData = (e) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const updateUserData = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleRegistration = (e) => {
     e.preventDefault();
     if (userData.password === userData.confirmPassword) {
       axios
@@ -40,19 +43,12 @@ const Hero = () => {
     }
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setShowRegisterForm(window.innerWidth > 768); // Check window width
-    };
-
-    window.addEventListener("resize", handleResize); // Listen to resize event
-
-    handleResize(); // Initial check on component mount
-
-    return () => {
-      window.removeEventListener("resize", handleResize); // Clean up
-    };
-  }, []);
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    // Use the data to che of there is a user with such email in db
+    // If email is found check if passwords match
+    
+  };
 
   return (
     <div
@@ -75,17 +71,62 @@ const Hero = () => {
                   Welcome to Bookist. An application where users log in and book
                   for events and appointments.
                 </p>
-                <button className="mt-8 mx-auto px-4 py-2 bg-blue-500 hover:bg-blue-400 active:bg-blue-300 text-white rounded-md block">
-                  Book Now...
+                <button
+                  disabled
+                  className="mt-8 mx-auto px-4 py-2 bg-blue-500 text-white block"
+                >
+                  Book With Us Today
                 </button>
               </div>
 
-              {showRegisterForm && (
-                <div className="p-8 flex flex-col justify-center">
-                  <form
-                    onSubmit={handleSubmit}
-                    className="bg-white bg-opacity-50 p-4 rounded-md text-center"
-                  >
+              {registered ? (
+                <div className="p-8 flex flex-col justify-center bg-white bg-opacity-50 rounded-md text-center">
+                  <form onSubmit={handleSignIn}>
+                    <h2 className="text-2xl font-bold text-white mb-4 bg-blue-500 rounded-md pt-2 pb-2">
+                      Sign In
+                    </h2>
+
+                    <input
+                      required
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
+                    />
+
+                    <input
+                      required
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
+                    />
+
+                    <button
+                      required
+                      type="submit"
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
+                    >
+                      Submit
+                    </button>
+                  </form>
+                  <p className="pt-4 text-bold bg-white mt-3 pb-3 rounded-md">
+                    Dont't have an account?{" "}
+                    <span
+                      onClick={() => setRegistered(false)}
+                      className="text-blue-700 hover:text-blue-600 hover:cursor-pointer text-lg font-bold"
+                    >
+                      Sign Up
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <div className="p-8 flex flex-col justify-center bg-white bg-opacity-50 rounded-md text-center">
+                  <form onSubmit={handleRegistration}>
                     <h2 className="text-2xl font-bold text-white mb-4 bg-blue-500 rounded-md pt-2 pb-2">
                       Register
                     </h2>
@@ -95,7 +136,7 @@ const Hero = () => {
                       name="firstName"
                       placeholder="First Name"
                       value={userData.firstName}
-                      onChange={handleUserData}
+                      onChange={updateUserData}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
                     />
                     <input
@@ -104,7 +145,7 @@ const Hero = () => {
                       name="lastName"
                       placeholder="Last Name"
                       value={userData.lastName}
-                      onChange={handleUserData}
+                      onChange={updateUserData}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
                     />
                     <input
@@ -113,7 +154,7 @@ const Hero = () => {
                       name="email"
                       placeholder="Email"
                       value={userData.email}
-                      onChange={handleUserData}
+                      onChange={updateUserData}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
                     />
                     <input
@@ -122,7 +163,7 @@ const Hero = () => {
                       name="telNo"
                       placeholder="Phone Number"
                       value={userData.telNo}
-                      onChange={handleUserData}
+                      onChange={updateUserData}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
                     />
                     <input
@@ -131,7 +172,7 @@ const Hero = () => {
                       name="password"
                       placeholder="Password"
                       value={userData.password}
-                      onChange={handleUserData}
+                      onChange={updateUserData}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2"
                     />
                     <input
@@ -140,7 +181,7 @@ const Hero = () => {
                       name="confirmPassword"
                       placeholder="Confirm Password"
                       value={userData.confirmPassword}
-                      onChange={handleUserData}
+                      onChange={updateUserData}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4"
                     />
                     <button
@@ -151,6 +192,15 @@ const Hero = () => {
                       Register
                     </button>
                   </form>
+                  <p className="pt-4 text-bold bg-white mt-3 pb-3 rounded-md">
+                    Already have an account?{" "}
+                    <span
+                      onClick={() => setRegistered(true)}
+                      className="text-blue-700 hover:text-blue-600 hover:cursor-pointer text-lg font-bold"
+                    >
+                      Sign In
+                    </span>
+                  </p>
                 </div>
               )}
             </div>
