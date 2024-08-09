@@ -45,9 +45,26 @@ const Hero = () => {
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    // Use the data to che of there is a user with such email in db
-    // If email is found check if passwords match
-    
+
+    // Assuming email and password are defined elsewhere in your component
+    axios
+      .get(`http://localhost:3000/users?email=${email}`)
+      .then((res) => {
+        const users = res.data;
+        if (users.length === 0) {
+          alert("User with that email does not exist");
+        } else {
+          if (users[0].password === password) {
+            alert("Login successful");
+          } else {
+            alert("Incorrect password");
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("An error occurred while signing in");
+      });
   };
 
   return (
