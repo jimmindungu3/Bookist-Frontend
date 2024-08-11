@@ -10,7 +10,7 @@ const Hero = () => {
     <div
       className="relative"
       style={{
-        backgroundImage: 'url("/src/assets/hero.jpg")',
+        backgroundImage: 'url("hero.jpg")',
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
