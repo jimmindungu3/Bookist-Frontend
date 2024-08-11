@@ -1,13 +1,13 @@
-import Hero from "./components/Hero";
-import Navbar from "./components/Navbar";
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.css";
 
-function App() {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-    </>
-  );
-}
+import Home from "./pages/Home";
+
+const router = createBrowserRouter([{ path: "/", element: <Home /> }]);
+
+const App = () => {
+  return <RouterProvider router={router} />;
+};
 
 export default App;
