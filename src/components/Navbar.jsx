@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,21 +47,26 @@ function Navbar() {
           </button>
         ) : (
           <nav className="hidden md:flex items-center space-x-4">
-            <a href="#" className="text-gray-400 hover:text-white px-4">
-              Home
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white px-4">
-              Services
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white px-4">
-              Clients
-            </a>
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-              Sign Up
-            </button>
-            <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-100">
-              Sign In
-            </button>
+            <div>
+              <Link to={"/"} className="text-gray-400 hover:text-white px-4">
+                Home
+              </Link>
+              <Link to={"/"} className="text-gray-400 hover:text-white px-4">
+                About
+              </Link>
+              <Link to={"/"} className="text-gray-400 hover:text-white px-4">
+                Services
+              </Link>
+            </div>
+
+            <div>
+              <button className="px-4 py-2 mr-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                Sign Up
+              </button>
+              <button className="px-4 py-2 ml-1 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-100">
+                Sign In
+              </button>
+            </div>
           </nav>
         )}
       </div>
