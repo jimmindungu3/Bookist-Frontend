@@ -1,7 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import Map from "./Map";
+import axios from "axios";
 
 const AddEvent = () => {
+  const [event, setEvent] = useState({
+    title: "",
+    date: "",
+    time: "",
+    venue: "",
+    charge: "",
+    capacity: "",
+  });
+
+  const updateEventData = (e) => {
+    setEvent({ ...event, [e.target.name]: e.target.value });
+  };
+
+  const handleCreateEvent = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:3000/events", event)
+      .then((res) => {
+        console.table(res.data);
+        alert(`${res.data.title} Created Successfully`);
+      })
+      .catch((err) => console.log(err));
+    setEvent({
+      title: "",
+      date: "",
+      time: "",
+      venue: "",
+      charge: "",
+      capacity: "",
+    });
+  };
+
   return (
     <div
       className="relative"
@@ -25,9 +58,11 @@ const AddEvent = () => {
                       Event Title
                     </label>
                     <input
+                      onChange={updateEventData}
                       required
                       type="text"
-                      name="name"
+                      name="title"
+                      value={event.title}
                       placeholder="Event Title"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
@@ -37,9 +72,11 @@ const AddEvent = () => {
                       Event Date
                     </label>
                     <input
+                      onChange={updateEventData}
                       required
                       type="date"
                       name="date"
+                      value={event.date}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -48,9 +85,11 @@ const AddEvent = () => {
                       Kickoff Time
                     </label>
                     <input
+                      onChange={updateEventData}
                       required
                       type="time"
                       name="time"
+                      value={event.time}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -59,9 +98,11 @@ const AddEvent = () => {
                       Venue
                     </label>
                     <input
+                      onChange={updateEventData}
                       required
                       type="text"
                       name="venue"
+                      value={event.venue}
                       placeholder="E.g Hotel Amex RM 20"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
@@ -71,9 +112,11 @@ const AddEvent = () => {
                       Charge Per Head
                     </label>
                     <input
+                      onChange={updateEventData}
                       required
                       type="text"
-                      name="charges"
+                      name="charge"
+                      value={event.charge}
                       placeholder="Charge Per head"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
@@ -83,9 +126,11 @@ const AddEvent = () => {
                       Capacity
                     </label>
                     <input
+                      onChange={updateEventData}
                       required
                       type="number"
                       name="capacity"
+                      value={event.capacity}
                       placeholder="Capacity"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
@@ -94,6 +139,7 @@ const AddEvent = () => {
                   <button
                     required
                     type="submit"
+                    onClick={(e) => handleCreateEvent(e)}
                     className="px-4 py-2 mt-4 bg-blue-500 text-white rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
                   >
                     Create Event
