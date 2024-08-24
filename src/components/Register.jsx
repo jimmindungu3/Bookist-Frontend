@@ -17,7 +17,6 @@ const Register = ({ setRegistered }) => {
     telNo: "",
     password: "",
     confirmPassword: "",
-    role: "user",
   });
 
   const updateUserData = (e) => {
@@ -28,10 +27,8 @@ const Register = ({ setRegistered }) => {
     e.preventDefault();
     if (userData.password === userData.confirmPassword) {
       axios
-        .post("http://localhost:3000/users", userData)
-        .then((res) => {
-          console.log(res.status);
-          console.table(res.data);
+        .post("http://localhost:3000/api/users", userData)
+        .then(() => {
           alert("Signed Up Successfully");
           setUserData({
             firstName: "",
@@ -40,10 +37,11 @@ const Register = ({ setRegistered }) => {
             telNo: "",
             password: "",
             confirmPassword: "",
-            role: "user",
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       alert("Passwords do not match");
     }
@@ -128,7 +126,7 @@ const Register = ({ setRegistered }) => {
         <button
           required
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
+          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
         >
           Register
         </button>
