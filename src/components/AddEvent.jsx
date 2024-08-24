@@ -5,21 +5,45 @@ import axios from "axios";
 const AddEvent = () => {
   const [event, setEvent] = useState({
     title: "",
-    date: "",
-    time: "",
     venue: "",
-    charge: "",
     capacity: "",
+    dateTime: "",
+    charge: "",
+    description: "",
+    category: [],
+    status: "upcoming",
   });
 
+  const categories = [
+    "Music",
+    "Conference",
+    "Workshop",
+    "Sports",
+    "Networking",
+    "Theatre",
+    "Exhibition",
+  ];
+
   const updateEventData = (e) => {
-    setEvent({ ...event, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+    if (type === "checkbox") {
+      let updatedCategories = [...event.category];
+      if (e.target.checked) {
+        updatedCategories.push(value);
+      } else {
+        updatedCategories = updatedCategories.filter((cat) => cat !== value);
+      }
+      setEvent({ ...event, category: updatedCategories });
+    } else {
+      setEvent({ ...event, [name]: value });
+    }
   };
 
   const handleCreateEvent = (e) => {
     e.preventDefault();
+    console.log(event)
     axios
-      .post("http://localhost:3000/events", event)
+      .post("http://localhost:3000/api/events", event)
       .then((res) => {
         console.table(res.data);
         alert(`${res.data.title} Created Successfully`);
@@ -27,11 +51,13 @@ const AddEvent = () => {
       .catch((err) => console.log(err));
     setEvent({
       title: "",
-      date: "",
-      time: "",
       venue: "",
-      charge: "",
       capacity: "",
+      dateTime: "",
+      charge: "",
+      description: "",
+      category: [],
+      status: "upcoming",
     });
   };
 
@@ -46,7 +72,7 @@ const AddEvent = () => {
     >
       <div className="bg-blue-900 bg-opacity-50">
         <div className="container mx-auto px-4">
-          <div className="h-screen-vh flex justify-center items-center">
+          <div className="py-10 flex justify-center items-center">
             <div className="max-w-screen-xl w-full grid grid-cols-1 md:grid-cols-2 gap-2 bg-white bg-opacity-75 rounded-md">
               <div className="p-8 flex flex-col justify-center rounded-md text-center">
                 <form className="bg-slate-50 rounded-md p-6 bg-opacity-45">
@@ -54,7 +80,7 @@ const AddEvent = () => {
                     Create A New Event
                   </h2>
                   <div className="mb-4 text-left">
-                    <label htmlFor="name" className="block">
+                    <label htmlFor="title" className="block">
                       Event Title
                     </label>
                     <input
@@ -65,33 +91,23 @@ const AddEvent = () => {
                       value={event.title}
                       placeholder="Event Title"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      minLength="5"
+                      maxLength="50"
                     />
                   </div>
                   <div className="mb-4 text-left">
-                    <label htmlFor="date" className="block">
-                      Event Date
+                    <label htmlFor="status" className="block">
+                      Status
                     </label>
-                    <input
+                    <select
+                      name="status"
+                      value={event.status}
                       onChange={updateEventData}
-                      required
-                      type="date"
-                      name="date"
-                      value={event.date}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                  <div className="mb-4 text-left">
-                    <label htmlFor="time" className="block">
-                      Kickoff Time
-                    </label>
-                    <input
-                      onChange={updateEventData}
-                      required
-                      type="time"
-                      name="time"
-                      value={event.time}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    />
+                    >
+                      <option value="upcoming">Upcoming</option>
+                      <option value="ongoing">Ongoing</option>
+                    </select>
                   </div>
                   <div className="mb-4 text-left">
                     <label htmlFor="venue" className="block">
@@ -105,20 +121,8 @@ const AddEvent = () => {
                       value={event.venue}
                       placeholder="E.g Hotel Amex RM 20"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                  <div className="mb-4 text-left">
-                    <label htmlFor="charges" className="block">
-                      Charge Per Head
-                    </label>
-                    <input
-                      onChange={updateEventData}
-                      required
-                      type="text"
-                      name="charge"
-                      value={event.charge}
-                      placeholder="Charge Per head"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      minLength="5"
+                      maxLength="70"
                     />
                   </div>
                   <div className="mb-4 text-left">
@@ -133,11 +137,76 @@ const AddEvent = () => {
                       value={event.capacity}
                       placeholder="Capacity"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      min="10"
                     />
+                  </div>
+                  <div className="mb-4 text-left">
+                    <label htmlFor="dateTime" className="block">
+                      Event Date and Time
+                    </label>
+                    <input
+                      onChange={updateEventData}
+                      required
+                      type="datetime-local"
+                      name="dateTime"
+                      value={event.dateTime}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                  <div className="mb-4 text-left">
+                    <label htmlFor="charge" className="block">
+                      Charge Per Head
+                    </label>
+                    <input
+                      onChange={updateEventData}
+                      required
+                      type="number"
+                      name="charge"
+                      value={event.charge}
+                      placeholder="Charge Per head"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      min="0"
+                    />
+                  </div>
+                  <div className="mb-4 text-left">
+                    <label htmlFor="description" className="block">
+                      Description
+                    </label>
+                    <textarea
+                      onChange={updateEventData}
+                      name="description"
+                      value={event.description}
+                      placeholder="Event Description"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      maxLength="500"
+                    />
+                  </div>
+                  <div className="mb-4 text-left">
+                    <label className="block mb-2">Category (max 4)</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {categories.map((cat) => (
+                        <div key={cat}>
+                          <input
+                            type="checkbox"
+                            id={cat}
+                            name="category"
+                            value={cat}
+                            checked={event.category.includes(cat)}
+                            onChange={updateEventData}
+                            disabled={
+                              event.category.length >= 4 &&
+                              !event.category.includes(cat)
+                            }
+                          />
+                          <label htmlFor={cat} className="ml-2">
+                            {cat}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <button
-                    required
                     type="submit"
                     onClick={(e) => handleCreateEvent(e)}
                     className="px-4 py-2 mt-4 bg-blue-500 text-white rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
