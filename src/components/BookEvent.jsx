@@ -13,7 +13,7 @@ const AddEvent = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/events")
+      .get("http://localhost:3000/api/events")
       .then((res) => setEvents(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -24,8 +24,18 @@ const AddEvent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData); // Replace with actual submission logic
+    axios
+      .post(`http://localhost:3000/api/booking/${formData.eventId}`, formData)
+      .then(() => {
+        alert("Event Booked Suucessfully");
+        setFormData({
+          eventId: "",
+          fullName: "",
+          IdNo: "",
+          email: "",
+        });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -46,7 +56,7 @@ const AddEvent = () => {
                 </label>
                 <select
                   id="event"
-                  name="eventId" // Changed name to eventId
+                  name="eventId"
                   value={formData.eventId}
                   onChange={handleChange}
                   required
@@ -56,7 +66,7 @@ const AddEvent = () => {
                     Select Event
                   </option>
                   {events.map((event) => (
-                    <option key={event.id} value={event.id}>
+                    <option key={event._id} value={event._id}>
                       {event.title}
                     </option>
                   ))}
@@ -94,7 +104,7 @@ const AddEvent = () => {
 
               <div className="mb-4 text-left">
                 <label htmlFor="email" className="block">
-                  Your email 
+                  Your email
                 </label>
                 <input
                   type="email"
@@ -108,7 +118,7 @@ const AddEvent = () => {
               </div>
               <button
                 type="submit"
-                className="px-4 py-2 font-semibold   bg-blue-500 text-white rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
+                className="px-4 py-2 font-semibold bg-blue-500 text-white rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
               >
                 Book
               </button>
