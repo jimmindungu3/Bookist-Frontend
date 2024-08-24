@@ -1,45 +1,32 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 import { FaEye } from "react-icons/fa";
 
 const SignIn = ({ setRegistered }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fieldType, setFieldType] = useState("password");
+  const Navigate = useNavigate();
 
   const changeFieldType = () => {
     fieldType === "password" ? setFieldType("text") : setFieldType("password");
   };
 
-  const handleSignIn = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-
+    // console.log({ email, password });
     axios
-      .get(`http://localhost:3000/users?email=${email}`)
+      .post("http://localhost:3000/users/login", { email, password })
       .then((res) => {
-        const users = res.data;
-        if (users.length === 0) {
-          alert("User with that email does not exist");
-        } else {
-          if (users[0].password === password) {
-            alert("Login successful");
-            setEmail("");
-            setPassword("");
-          } else {
-            alert("Incorrect password");
-          }
-        }
+        if (res.status === 200) Navigate("/create-event");
       })
-      .catch((err) => {
-        console.log(err);
-        alert("An error occurred while signing in");
-      });
+      .catch((err) => console.log(err));
   };
 
   return (
     <div className="p-8 flex flex-col justify-center bg-white bg-opacity-50 rounded-md text-center">
-      <form onSubmit={handleSignIn}>
+      <form onSubmit={handleLogin}>
         <h2 className="text-2xl font-bold text-white mb-4 bg-blue-500 rounded-md pt-2 pb-2">
           Sign In
         </h2>
@@ -74,7 +61,7 @@ const SignIn = ({ setRegistered }) => {
         <button
           required
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
+          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
         >
           Submit
         </button>
