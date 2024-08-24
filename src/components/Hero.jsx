@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import SignIn from "./SignIn";
 import Register from "./Register";
@@ -27,12 +28,11 @@ const Hero = () => {
                   Welcome to Bookist. An application where users log in and book
                   for events and appointments.
                 </p>
-                <button
-                  disabled
-                  className="mt-8 mx-auto px-4 py-2 bg-blue-500 text-white block"
-                >
-                  Book With Us Today
-                </button>
+                <Link to={"book-event"}>
+                  <button className="mt-8 mx-auto px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-md block">
+                    Book With Us Today
+                  </button>
+                </Link>
               </div>
 
               {registered ? (
