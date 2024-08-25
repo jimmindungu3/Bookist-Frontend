@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Map from "./Map";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddEvent = () => {
   const [event, setEvent] = useState({
@@ -24,6 +26,42 @@ const AddEvent = () => {
     "Exhibition",
   ];
 
+  const notifySuccess = () => {
+    setTimeout(() => setRegistered(true), 1700);
+    toast.success("Event created successfully", {
+      position: "top-center",
+      autoClose: 1500,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+      style: {
+        backgroundColor: "white",
+        color: "#2563eb",
+      },
+      progressStyle: {
+        backgroundColor: "#2563eb",
+      },
+    });
+  };
+
+  const notifyError = () =>
+    toast.error("Oops! Could not create event", {
+      position: "top-center",
+      autoClose: 1500,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+      style: {
+        backgroundColor: "white",
+        color: "#dc2626",
+      },
+      progressStyle: {
+        backgroundColor: "#dc2626",
+      },
+    });
+
   const updateEventData = (e) => {
     const { name, value, type } = e.target;
     if (type === "checkbox") {
@@ -41,24 +79,25 @@ const AddEvent = () => {
 
   const handleCreateEvent = (e) => {
     e.preventDefault();
-    console.log(event)
     axios
       .post("http://localhost:3000/api/events", event)
       .then((res) => {
-        console.table(res.data);
-        alert(`${res.data.title} Created Successfully`);
+        notifySuccess();
+        setEvent({
+          title: "",
+          venue: "",
+          capacity: "",
+          dateTime: "",
+          charge: "",
+          description: "",
+          category: [],
+          status: "upcoming",
+        });
       })
-      .catch((err) => console.log(err));
-    setEvent({
-      title: "",
-      venue: "",
-      capacity: "",
-      dateTime: "",
-      charge: "",
-      description: "",
-      category: [],
-      status: "upcoming",
-    });
+      .catch((err) => {
+        console.log(err);
+        notifyError();
+      });
   };
 
   return (
@@ -209,7 +248,7 @@ const AddEvent = () => {
                   <button
                     type="submit"
                     onClick={(e) => handleCreateEvent(e)}
-                    className="px-4 py-2 mt-4 bg-blue-500 text-white rounded-md text-center hover:bg-blue-400 active:bg-blue-300"
+                    className="px-4 py-2 mt-4 bg-blue-600 text-white font-semibold rounded-md text-center hover:bg-blue-500 active:bg-blue-400"
                   >
                     Create Event
                   </button>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye } from "react-icons/fa";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignIn = ({ setRegistered }) => {
   const [email, setEmail] = useState("");
@@ -13,6 +15,23 @@ const SignIn = ({ setRegistered }) => {
     fieldType === "password" ? setFieldType("text") : setFieldType("password");
   };
 
+  const notifyError = () =>
+    toast.error("Could not sign you in. Check your details", {
+      position: "top-center",
+      autoClose: 2000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+      style: {
+        backgroundColor: "white",
+        color: "#dc2626",
+      },
+      progressStyle: {
+        backgroundColor: "#dc2626",
+      },
+    });
+
   const handleLogin = (e) => {
     e.preventDefault();
     // console.log({ email, password });
@@ -21,7 +40,10 @@ const SignIn = ({ setRegistered }) => {
       .then((res) => {
         if (res.status === 200) Navigate("/create-event");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        notifyError();
+      });
   };
 
   return (
