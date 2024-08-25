@@ -24,7 +24,9 @@ function Navbar() {
   return (
     <header className="bg-blue-950 py-4">
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <div className="text-white text-xl font-bold">Bookist</div>
+        <Link to={"/"}>
+          <div className="text-white text-xl font-bold">Bookist</div>
+        </Link>
         {windowWidth <= 768 ? (
           <button
             onClick={toggleMenu}
