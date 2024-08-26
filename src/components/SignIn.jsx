@@ -36,7 +36,7 @@ const SignIn = ({ setRegistered }) => {
     e.preventDefault();
     // console.log({ email, password });
     axios
-      .post("http://localhost:3000/users/login", { email, password })
+      .post("https://bookist-backend.onrender.com/users/login", { email, password })
       .then((res) => {
         if (res.status === 200) Navigate("/create-event");
       })

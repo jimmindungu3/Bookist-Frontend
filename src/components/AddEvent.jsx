@@ -80,7 +80,7 @@ const AddEvent = () => {
   const handleCreateEvent = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/api/events", event)
+      .post("https://bookist-backend.onrender.com/api/events", event)
       .then((res) => {
         notifySuccess();
         setEvent({

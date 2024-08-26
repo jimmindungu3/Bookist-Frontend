@@ -83,7 +83,7 @@ const Register = ({ setRegistered }) => {
     e.preventDefault();
     if (userData.password === userData.confirmPassword) {
       axios
-        .post("http://localhost:3000/api/users", userData)
+        .post("https://bookist-backend.onrender.com/api/users", userData)
         .then(() => {
           notifySuccess();
           setUserData({

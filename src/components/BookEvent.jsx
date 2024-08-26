@@ -13,7 +13,7 @@ const AddEvent = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/events")
+      .get("https://bookist-backend.onrender.com/api/events")
       .then((res) => setEvents(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -25,7 +25,7 @@ const AddEvent = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:3000/api/booking/${formData.eventId}`, formData)
+      .post(`https://bookist-backend.onrender.com/api/booking/${formData.eventId}`, formData)
       .then(() => {
         alert("Event Booked Suucessfully");
         setFormData({
