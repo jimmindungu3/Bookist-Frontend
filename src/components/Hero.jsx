@@ -18,7 +18,7 @@ const Hero = () => {
     >
       <div className="bg-blue-900 bg-opacity-50">
         <div className="container mx-auto px-4">
-          <div className="h-screen-vh flex justify-center items-center">
+          <div className="h-auto sm:h-screen flex justify-center items-center">
             <div className="max-w-screen-xl w-full grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-8 flex flex-col justify-center">
                 <h2 className="text-3xl font-bold text-white text-center mb-4">

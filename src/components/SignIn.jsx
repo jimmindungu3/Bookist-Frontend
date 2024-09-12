@@ -36,7 +36,10 @@ const SignIn = ({ setRegistered }) => {
     e.preventDefault();
     // console.log({ email, password });
     axios
-      .post("https://bookist-backend.onrender.com/users/login", { email, password })
+      .post("https://bookist-backend.onrender.com/users/login", {
+        email,
+        password,
+      })
       .then((res) => {
         if (res.status === 200) Navigate("/create-event");
       })
@@ -47,7 +50,7 @@ const SignIn = ({ setRegistered }) => {
   };
 
   return (
-    <div className="p-8 flex flex-col justify-center bg-white bg-opacity-50 rounded-md text-center">
+    <div className="p-4 mb-12 flex flex-col justify-center bg-white bg-opacity-50 rounded-md text-center">
       <form onSubmit={handleLogin}>
         <h2 className="text-2xl font-bold text-white mb-4 bg-blue-500 rounded-md pt-2 pb-2">
           Sign In

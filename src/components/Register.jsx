@@ -79,12 +79,15 @@ const Register = ({ setRegistered }) => {
       },
     });
 
-  const handleRegistration = (e) => {
+  const handleRegistration = async (e) => {
     e.preventDefault();
     if (userData.password === userData.confirmPassword) {
-      axios
-        .post("https://bookist-backend.onrender.com/api/users", userData)
-        .then(() => {
+      try {
+        const response = await axios.post(
+          "https://bookist-backend.onrender.com/api/users",
+          userData
+        );
+        if (response) {
           notifySuccess();
           setUserData({
             firstName: "",
@@ -94,18 +97,18 @@ const Register = ({ setRegistered }) => {
             password: "",
             confirmPassword: "",
           });
-        })
-        .catch((err) => {
-          console.log(err);
-          notifyError();
-        });
+        }
+      } catch (error) {
+        console.error("There was a problem with the axios request:", error);
+        notifyError();
+      }
     } else {
       passwordMissmatch();
     }
   };
 
   return (
-    <div className="p-8 flex flex-col justify-center bg-white bg-opacity-50 rounded-md text-center">
+    <div className="p-8 mb-20 flex flex-col justify-center bg-white bg-opacity-50 rounded-md text-center">
       <form onSubmit={handleRegistration}>
         <h2 className="text-2xl font-bold text-white mb-4 bg-blue-600 rounded-md pt-2 pb-2">
           Register
